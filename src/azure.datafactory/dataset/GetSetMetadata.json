@@ -1,0 +1,12 @@
+{
+    "name": "DS_Metadata_Database",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "LS_Metadata_Database",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": []
+    }
+}

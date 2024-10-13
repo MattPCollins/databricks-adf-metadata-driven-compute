@@ -1,0 +1,14 @@
+{
+    "name": "LS_Metadata_Database",
+    "properties": {
+        "annotations": [],
+        "type": "AzureSqlDatabase",
+        "typeProperties": {
+            "server": "metadatademodevsqldbuks01.database.windows.net",
+            "database": "metadata-db",
+            "encrypt": "mandatory",
+            "trustServerCertificate": false,
+            "authenticationType": "SystemAssignedManagedIdentity"
+        }
+    }
+}

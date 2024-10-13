@@ -1,0 +1,32 @@
+{
+    "name": "LS_Databricks_InteractiveCluster",
+    "properties": {
+        "parameters": {
+            "WorkspaceURL": {
+                "type": "string"
+            },
+            "ResourceGroupName": {
+                "type": "string"
+            },
+            "ResourceName": {
+                "type": "string"
+            },
+            "SubscriptionId": {
+                "type": "string"
+            },
+            "ClusterId": {
+                "type": "string"
+            }
+        },
+        "annotations": [
+            "InteractiveCluster"
+        ],
+        "type": "AzureDatabricks",
+        "typeProperties": {
+            "domain": "@linkedService().WorkspaceURL",
+            "authentication": "MSI",
+            "workspaceResourceId": "@concat('/subscriptions/',linkedService().SubscriptionId,'/resourceGroups/',linkedService().ResourceGroupName,'/providers/Microsoft.Databricks/workspaces/',linkedService().ResourceName)",
+            "existingClusterId": "@linkedService().ClusterId"
+        }
+    }
+}
