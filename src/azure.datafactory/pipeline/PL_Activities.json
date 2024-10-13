@@ -1,0 +1,188 @@
+{
+    "name": "PL_Activities",
+    "properties": {
+        "activities": [
+            {
+                "name": "Get Payload",
+                "type": "Lookup",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureSqlSource",
+                        "sqlReaderStoredProcedureName": "[demo].[GetPayload]",
+                        "storedProcedureParameters": {
+                            "ActivityId": {
+                                "type": "Int16",
+                                "value": {
+                                    "value": "@pipeline().parameters.ActivityId",
+                                    "type": "Expression"
+                                }
+                            }
+                        },
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "dataset": {
+                        "referenceName": "DS_Metadata_Database",
+                        "type": "DatasetReference"
+                    }
+                }
+            },
+            {
+                "name": "Switch Compute",
+                "type": "Switch",
+                "dependsOn": [
+                    {
+                        "activity": "Get Payload",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "on": {
+                        "value": "@activity('Get Payload').output.firstRow.ComputeLinkedServiceName",
+                        "type": "Expression"
+                    },
+                    "cases": [
+                        {
+                            "value": "LS_Databricks_InteractiveCluster",
+                            "activities": [
+                                {
+                                    "name": "Execute Notebook Interactive",
+                                    "type": "DatabricksNotebook",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "timeout": "0.12:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "notebookPath": {
+                                            "value": "@activity('Get Payload').output.firstRow.NotebookPath",
+                                            "type": "Expression"
+                                        }
+                                    },
+                                    "linkedServiceName": {
+                                        "referenceName": "LS_Databricks_InteractiveCluster",
+                                        "type": "LinkedServiceReference",
+                                        "parameters": {
+                                            "WorkspaceURL": {
+                                                "value": "@activity('Get Payload').output.firstRow.ComputeWorkspaceURL",
+                                                "type": "Expression"
+                                            },
+                                            "ResourceGroupName": {
+                                                "value": "@activity('Get Payload').output.firstRow.ResourceGroupName",
+                                                "type": "Expression"
+                                            },
+                                            "ResourceName": {
+                                                "value": "@activity('Get Payload').output.firstRow.ComputeResourceName",
+                                                "type": "Expression"
+                                            },
+                                            "SubscriptionId": {
+                                                "value": "@activity('Get Payload').output.firstRow.SubscriptionId",
+                                                "type": "Expression"
+                                            },
+                                            "ClusterId": {
+                                                "value": "@activity('Get Payload').output.firstRow.ComputeClusterId",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "value": "LS_Databricks_JobCluster_Python3",
+                            "activities": [
+                                {
+                                    "name": "Execute Notebook Job",
+                                    "type": "DatabricksNotebook",
+                                    "dependsOn": [],
+                                    "policy": {
+                                        "timeout": "0.12:00:00",
+                                        "retry": 0,
+                                        "retryIntervalInSeconds": 30,
+                                        "secureOutput": false,
+                                        "secureInput": false
+                                    },
+                                    "userProperties": [],
+                                    "typeProperties": {
+                                        "notebookPath": {
+                                            "value": "@activity('Get Payload').output.firstRow.NotebookPath",
+                                            "type": "Expression"
+                                        }
+                                    },
+                                    "linkedServiceName": {
+                                        "referenceName": "LS_Databricks_JobCluster_Python3",
+                                        "type": "LinkedServiceReference",
+                                        "parameters": {
+                                            "WorkspaceURL": {
+                                                "value": "@activity('Get Payload').output.firstRow.ComputeWorkspaceURL",
+                                                "type": "Expression"
+                                            },
+                                            "ClusterVersion": {
+                                                "value": "@activity('Get Payload').output.firstRow.ComputeVersion",
+                                                "type": "Expression"
+                                            },
+                                            "NodeType": {
+                                                "value": "@activity('Get Payload').output.firstRow.ComputeSize",
+                                                "type": "Expression"
+                                            },
+                                            "NumWorkers": {
+                                                "value": "@activity('Get Payload').output.firstRow.CountNodes",
+                                                "type": "Expression"
+                                            },
+                                            "SubscriptionId": {
+                                                "value": "@activity('Get Payload').output.firstRow.SubscriptionId",
+                                                "type": "Expression"
+                                            },
+                                            "ResourceName": {
+                                                "value": "@activity('Get Payload').output.firstRow.ComputeResourceName",
+                                                "type": "Expression"
+                                            },
+                                            "ResourceGroupName": {
+                                                "value": "@activity('Get Payload').output.firstRow.ResourceGroupName",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "defaultActivities": [
+                        {
+                            "name": "Supported Linked Service Type",
+                            "type": "Fail",
+                            "dependsOn": [],
+                            "userProperties": [],
+                            "typeProperties": {
+                                "message": "The Linked Service type and authentication combination is not currently supported.",
+                                "errorCode": "16"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "ActivityId": {
+                "type": "int"
+            }
+        },
+        "annotations": []
+    }
+}
