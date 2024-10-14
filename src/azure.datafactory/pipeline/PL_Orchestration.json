@@ -17,7 +17,7 @@
                 "typeProperties": {
                     "source": {
                         "type": "AzureSqlSource",
-                        "sqlReaderQuery": "SELECT a.ActivityId\nFROM demo.Activities AS a\nWHERE a.Enabled = 1",
+                        "sqlReaderStoredProcedureName": "[demo].[GetActivities]",
                         "queryTimeout": "02:00:00",
                         "partitionOption": "None"
                     },
