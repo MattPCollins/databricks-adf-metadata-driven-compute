@@ -9,6 +9,6 @@ INSERT INTO [demo].[Activities](
 	[Enabled]
 )
 VALUES 
-(@SmallInteractiveClusterId,'Small Activity','/Workspace/Users/matthew.collins@cloudformations.org/databricks-adf-metadata-driven-compute/src/azure.databricks/python/notebooks/demos/smallactivity',1),
-(@MediumInteractiveClusterId,'Medium Activity','/Workspace/Users/matthew.collins@cloudformations.org/databricks-adf-metadata-driven-compute/src/azure.databricks/python/notebooks/demos/mediumactivity',1),
-(@BigInteractiveClusterId,'Big Activity','/Workspace/Users/matthew.collins@cloudformations.org/databricks-adf-metadata-driven-compute/src/azure.databricks/python/notebooks/demos/bigactivity',1);
+(@SmallInteractiveClusterId,'Small Activity','/Workspace/Users/DemoUser/databricks-adf-metadata-driven-compute/src/azure.databricks/python/notebooks/demos/smallactivity',1),
+(@MediumInteractiveClusterId,'Medium Activity','/Workspace/Users/DemoUser/databricks-adf-metadata-driven-compute/src/azure.databricks/python/notebooks/demos/mediumactivity',1),
+(@BigInteractiveClusterId,'Big Activity','/Workspace/Users/DemoUser/databricks-adf-metadata-driven-compute/src/azure.databricks/python/notebooks/demos/bigactivity',1);
